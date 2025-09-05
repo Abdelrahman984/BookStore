@@ -1,3 +1,5 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5068";
+
 export interface Book {
   id: string;
   title: string;
@@ -10,8 +12,6 @@ export interface Book {
   publicationDate?: string;
   stock?: number;
 }
-
-// Order shapes as backend returns
 export interface OrderItemRead {
   bookId: string;
   bookTitle?: string;
@@ -30,7 +30,6 @@ export interface OrderRead {
   items: OrderItemRead[];
   createdAt: string;
 }
-
 export interface OrderSummary {
   id: string;
   customerName: string;
@@ -38,8 +37,6 @@ export interface OrderSummary {
   total: number;
   createdAt: string;
 }
-
-// Payload for POST
 export interface OrderCreatePayload {
   customerName: string;
   customerEmail: string;
@@ -50,16 +47,27 @@ export interface OrderCreatePayload {
     price: number;
   }>;
 }
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  token: string;
+}
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5068";
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
 
 export const api = {
+  // GET /api/books
   getBooks: async (): Promise<Book[]> => {
     const res = await fetch(`${API_BASE_URL}/api/books`);
     if (!res.ok) throw new Error("Failed to fetch books");
     return res.json();
   },
 
+  // GET /api/books/{id}
   getBook: async (id: string): Promise<Book> => {
     const res = await fetch(`${API_BASE_URL}/api/books/${id}`);
     if (!res.ok) throw new Error("Failed to fetch book");
@@ -68,9 +76,13 @@ export const api = {
 
   // POST /api/orders
   createOrder: async (order: OrderCreatePayload): Promise<{ id: string }> => {
+    const token = localStorage.getItem("token");
     const res = await fetch(`${API_BASE_URL}/api/orders`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...getAuthHeaders(),
+      },
       body: JSON.stringify(order),
     });
     if (!res.ok) {
@@ -83,15 +95,45 @@ export const api = {
 
   // GET /api/orders/{id}
   getOrder: async (id: string): Promise<OrderRead> => {
-    const res = await fetch(`${API_BASE_URL}/api/orders/${id}`);
+    const res = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
+      headers: getAuthHeaders(),
+    });
     if (!res.ok) throw new Error("Failed to fetch order");
     return res.json();
   },
 
   // GET /api/orders
   getOrders: async (): Promise<OrderSummary[]> => {
-    const res = await fetch(`${API_BASE_URL}/api/orders`);
+    const res = await fetch(`${API_BASE_URL}/api/orders`, {
+      headers: getAuthHeaders(),
+    });
     if (!res.ok) throw new Error("Failed to fetch orders");
     return res.json();
+  },
+
+  // POST /api/auth/login
+  login: async (data: { email: string; password: string }): Promise<User> => {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error("Failed to login");
+    return response.json();
+  },
+
+  // POST /api/auth/register
+  register: async (data: {
+    name: string;
+    email: string;
+    password: string;
+  }): Promise<User> => {
+    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error("Failed to register");
+    return response.json();
   },
 };

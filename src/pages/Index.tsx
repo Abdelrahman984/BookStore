@@ -55,8 +55,8 @@ const Index = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="h-8 w-8 text-accent" />
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Heart className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Curated Selection</h3>
               <p className="text-muted-foreground">
@@ -64,8 +64,8 @@ const Index = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-secondary/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="h-8 w-8 text-secondary-foreground" />
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Best Prices</h3>
               <p className="text-muted-foreground">

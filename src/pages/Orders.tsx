@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 
 const Orders = () => {
   const { data, isLoading, error } = useQuery({
@@ -9,7 +10,12 @@ const Orders = () => {
     queryFn: api.getOrders,
   });
 
-  if (isLoading) return <div className="p-6">Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="animate-spin m-6" />
+      </div>
+    );
   if (error)
     return <div className="p-6 text-red-500">Failed to load orders</div>;
 
