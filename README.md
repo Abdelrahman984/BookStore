@@ -37,7 +37,7 @@ This is a full-stack Book Store application consisting of a **frontend** built w
 
 ## Demo
 
-* Frontend: [BookStore Frontend](https://book-store-k9135yelb-abdelrahman984s-projects.vercel.app/)
+* Frontend: [BookStore Frontend](https://book-store-mocha-phi.vercel.app/)
 * Backend API: [BookStore API](https://bookrstoreapi.runasp.net/swagger/index.html)
 
 ---
